@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class GiantController : MonoBehaviour {
 
@@ -12,6 +12,7 @@ public class GiantController : MonoBehaviour {
 
     Animator animator;
     AudioSource audioSource;
+    Text heathStatus;
     int hitPoints;
     float elapsed;
     string[] actions = new string[] {"hit1", "hit2", "death", "punchRight", "punchLeft", "slamRight", "slamLeft", "slamBig", "downGrab", "downLook"};
@@ -22,7 +23,8 @@ public class GiantController : MonoBehaviour {
         animator = gameObject.GetComponentInChildren<Animator>();
         audioSource = gameObject.GetComponent<AudioSource>();
         elapsed = 0f;
-        hitPoints = 3;
+        hitPoints = 4;
+        heathStatus = gameObject.GetComponentInChildren<Text>();
 	}
 	
 	// Update is called once per frame
@@ -34,7 +36,7 @@ public class GiantController : MonoBehaviour {
             if (elapsed >= 5.0f)
             {
                 elapsed = 0f;
-                int i = Random.Range(0, actions.Length - 1);
+                int i = Random.Range(0, actions.Length);
                 string action = actions[i];
                 animator.SetTrigger(action);
                 audioSource.loop = false;
@@ -65,27 +67,39 @@ public class GiantController : MonoBehaviour {
 
     public void OnSelect()
     {
-        if (hitPoints == 3)
+
+        if (hitPoints == 4)
+        {
+            heathStatus.text = "80%";
+        }
+        else if (hitPoints == 3)
+        {
+            heathStatus.text = "40%";
+            heathStatus.color = Color.yellow;
+        }
+        else if (hitPoints == 2)
+        {
+            heathStatus.text = "20%";
+            heathStatus.color = Color.red;
+        }
+        else
+        {
+            heathStatus.text = "0%";
+        }
+
+        if (hitPoints > 1)
         {
             int choice = Random.Range(0, 2);
             if (choice == 0)
             {
                 animator.SetTrigger("hit1");
             }
-            else if (choice == 1)
+            else
             {
                 animator.SetTrigger("hit2");
             }
-            else
-            {
-                animator.SetTrigger("death");
-            }
         }
-        else if (hitPoints == 2)
-        {
-            animator.SetTrigger("hit2");
-        }
-        else if (hitPoints == 1)
+        else
         {
             animator.SetTrigger("death");
         }
