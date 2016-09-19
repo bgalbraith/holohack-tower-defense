@@ -33,14 +33,9 @@ namespace HoloToolkit.Unity
         private SpatialMappingObserver surfaceObserver;
 
         /// <summary>
-        /// Used for loading or saving spatial mapping data to disk.
+        /// Used for loading spatial mapping data from a room model.
         /// </summary>
-        private FileSurfaceObserver fileSurfaceObserver;
-
-        /// <summary>
-        /// Used for sending meshes over the network and saving them to disk.
-        /// </summary>
-        private RemoteMeshTarget remoteMeshTarget;
+        private ObjectSurfaceObserver objectSurfaceObserver;
 
         /// <summary>
         /// Time when StartObserver() was called.
@@ -63,53 +58,23 @@ namespace HoloToolkit.Unity
         // Use for initialization.
         private void Start()
         {
-            remoteMeshTarget = FindObjectOfType<RemoteMeshTarget>();
 
 #if !UNITY_EDITOR
             StartObserver();
 #endif
 
 #if UNITY_EDITOR
-            fileSurfaceObserver = GetComponent<FileSurfaceObserver>();
+            objectSurfaceObserver = GetComponent<ObjectSurfaceObserver>();
 
-            if (fileSurfaceObserver != null)
+            if (objectSurfaceObserver != null)
             {
-                // In the Unity editor, try loading a saved mesh.
-                fileSurfaceObserver.Load(fileSurfaceObserver.MeshFileName);
+                // In the Unity editor, try loading saved meshes from a model.
+                objectSurfaceObserver.Load(objectSurfaceObserver.roomModel);
 
-                if (fileSurfaceObserver.GetMeshFilters().Count > 0)
+                if (objectSurfaceObserver.GetMeshFilters().Count > 0)
                 {
-                    SetSpatialMappingSource(fileSurfaceObserver);
+                    SetSpatialMappingSource(objectSurfaceObserver);
                 }
-                else if (remoteMeshTarget != null)
-                {
-                    SetSpatialMappingSource(remoteMeshTarget);
-                }
-            }
-#endif
-        }
-
-        // Called every frame.
-        private void Update()
-        {
-            // There are a few keyboard commands we will add when in the editor.
-#if UNITY_EDITOR
-            // F - to use the 'file' sourced mesh.
-            if (Input.GetKeyUp(KeyCode.F))
-            {
-                SpatialMappingManager.Instance.SetSpatialMappingSource(fileSurfaceObserver);
-            }
-
-            // S - saves the active mesh
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-                MeshSaver.Save(fileSurfaceObserver.MeshFileName, SpatialMappingManager.Instance.GetMeshes());
-            }
-
-            // L - loads the previously saved mesh into the file source.
-            if (Input.GetKeyUp(KeyCode.L))
-            {
-                fileSurfaceObserver.Load(fileSurfaceObserver.MeshFileName);
             }
 #endif
         }
@@ -240,7 +205,7 @@ namespace HoloToolkit.Unity
         }
 
         /// <summary>
-        /// Instructs the SurfaceObserver to stop updating the SpatialMapping mesh.
+        /// Instructs the SurfacesurfaceObserver to stop updating the SpatialMapping mesh.
         /// </summary>
         public void StopObserver()
         {
@@ -304,7 +269,6 @@ namespace HoloToolkit.Unity
 
         /// <summary>
         /// Updates the rendering state on the currently enabled surfaces.
-        /// Updates the material and shadow casting mode for each renderer.
         /// </summary>
         /// <param name="Enable">True, if meshes should be rendered.</param>
         private void UpdateRendering(bool Enable)

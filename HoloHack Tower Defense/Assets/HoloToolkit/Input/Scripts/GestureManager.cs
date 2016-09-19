@@ -51,7 +51,6 @@ namespace HoloToolkit.Unity
         {
             if (focusedObject != null)
             {
-                Debug.Log("Tap event: " + focusedObject.name);
                 focusedObject.SendMessage("OnSelect");
             }
         }

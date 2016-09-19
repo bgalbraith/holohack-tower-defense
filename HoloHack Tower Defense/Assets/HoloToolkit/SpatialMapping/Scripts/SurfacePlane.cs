@@ -1,7 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
-
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace HoloToolkit.Unity
@@ -104,16 +101,6 @@ namespace HoloToolkit.Unity
             }
         }
 
-        private void Awake()
-        {
-            plane = new BoundedPlane(transform);
-        }
-
-        private void Start()
-        {
-            UpdateSurfacePlane();
-        }
-
         /// <summary>
         /// Updates the SurfacePlane object to have the same configuration of the BoundingPlane object.
         /// Determine what type of plane the SurfacePlane aligns to.
@@ -171,7 +158,7 @@ namespace HoloToolkit.Unity
                     PlaneType = PlaneTypes.Table;
                 }
             }
-            else if (Mathf.Abs(SurfaceNormal.y) <= (1 - UpNormalThreshold))
+            else if(Mathf.Abs(SurfaceNormal.y) <= (1 - UpNormalThreshold))
             {
                 // If the plane is vertical, then classify it as a wall.
                 PlaneType = PlaneTypes.Wall;
@@ -217,7 +204,7 @@ namespace HoloToolkit.Unity
                     }
                     break;
                 default:
-                    if (UnknownMaterial != null)
+                    if(UnknownMaterial != null)
                     {
                         renderer.material = UnknownMaterial;
                     }

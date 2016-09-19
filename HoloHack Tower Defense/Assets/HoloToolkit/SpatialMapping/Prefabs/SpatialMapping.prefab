@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000013298573622}
   - 114: {fileID: 114000012698980792}
   - 114: {fileID: 114000011154029958}
-  - 114: {fileID: 114000012459388718}
+  - 114: {fileID: 114000010641181420}
   m_Layer: 0
   m_Name: SpatialMapping
   m_TagString: Untagged
@@ -41,6 +41,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114000010641181420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010302963436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7aff72e2b81a1a4183d67105c7e844f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomModel: {fileID: 0}
 --- !u!114 &114000011154029958
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -56,18 +69,6 @@ MonoBehaviour:
   surfaceMaterial: {fileID: 2100000, guid: d698790d3facd3d4289a13fa1243030a, type: 2}
   drawVisualMeshes: 1
   castShadows: 0
---- !u!114 &114000012459388718
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010302963436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c96e5de2c5d6ff048a7008e554de2a56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MeshFileName: roombackup
 --- !u!114 &114000012698980792
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -82,3 +83,4 @@ MonoBehaviour:
   TrianglesPerCubicMeter: 500
   Extents: {x: 10, y: 10, z: 10}
   TimeBetweenUpdates: 3.5
+  RecalculateNormals: 1

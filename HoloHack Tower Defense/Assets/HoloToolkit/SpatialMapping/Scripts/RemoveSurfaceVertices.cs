@@ -1,7 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -136,7 +133,7 @@ namespace HoloToolkit.Unity
 
                     Mesh mesh = filter.sharedMesh;
 
-                    if (mesh != null && !mesh.bounds.Intersects(bounds))
+                    if (mesh != null || !mesh.bounds.Intersects(bounds))
                     {
                         // We don't need to do anything to this mesh, move to the next one.
                         continue;

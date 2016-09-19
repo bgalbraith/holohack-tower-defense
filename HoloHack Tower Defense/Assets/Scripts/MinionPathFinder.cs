@@ -1,63 +1,60 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent( typeof( Minion ) )]
 public class MinionPathFinder : MonoBehaviour {
 
-    private Vector3 spawnPointPos;
-    private Vector3 endPointPos;
+    private Transform spawnPoint;
+    private Transform endPoint;
 
     private Vector3 startDirection;
 
-    public Transform contactPoint;
-    public bool onWall = false;
+    private Vector3 currentSurfaceNormal;
+    public float surfaceNormalThreshold = 0.01f;
 
-    public float TARGET_DIST_EPSILON = 0.5f;
-    public float WALL_DIST_EPSILON = 0.05f;
+    public bool forwardTraversal = true;
 
 
     void Awake()
     {
-        spawnPointPos = GameObject.Find("SpawnPoint").transform.position;
-        endPointPos = GameObject.Find("EndPoint").transform.position;
-
-        Vector3 direction = endPointPos - spawnPointPos;
-        direction.y = 0.0f;
-        startDirection = direction;
+        spawnPoint = GameObject.Find("SpawnPoint").transform;
+        endPoint = GameObject.Find("EndPoint").transform;
     }
 
 	// Use this for initialization
 	void Start () {
+
+        Vector3 direction = endPoint.position - spawnPoint.position;
+        direction.y = 0.0f;
+        startDirection = direction;
+
         transform.forward = startDirection;
+        currentSurfaceNormal = transform.up;
+
+        //transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+    }
 
-        Vector3 direction = endPointPos - contactPoint.position;
-        Vector3 heading = direction;
-        heading.y = 0.0f;
-        
-        if (onWall)
-        {
-            if (Vector3.Distance(endPointPos, contactPoint.position) < TARGET_DIST_EPSILON)
+    public void OnCollisionEnter(Collision collision) {    
+        if( forwardTraversal ){
+
+            foreach (ContactPoint contact in collision.contacts)
             {
-                Destroy(gameObject);
+                Debug.Log(Vector3.Dot(contact.normal, transform.up));
+
+                if( Vector3.Dot( contact.normal, transform.up ) <= surfaceNormalThreshold)
+                {
+                    currentSurfaceNormal = contact.normal;
+                    transform.forward = transform.up;
+                    //transform.up = currentSurfaceNormal;
+
+                    break;
+                }
             }
         }
-        else
-        {
-            if (heading.sqrMagnitude < WALL_DIST_EPSILON)
-            {
-                transform.GetComponent<Rigidbody>().useGravity = false;
-                transform.forward = transform.up;
-                onWall = true;
-            }
-        }
-
-        
-
-        
-
     }
 
 }
